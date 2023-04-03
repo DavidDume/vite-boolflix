@@ -19,7 +19,10 @@
       doSearch() {
         axios.get(`https://api.themoviedb.org/3/search/movie?api_key=ed158e502ecb83467e70d8afc24af02b&language=it_IT&query=${this.store.search}`).then(res => {
           this.store.movieList = res.data.results;
-          console.log(this.store.movieList);
+        });
+        axios.get(`https://api.themoviedb.org/3/search/tv?api_key=ed158e502ecb83467e70d8afc24af02b&language=it_IT&query=${this.store.search}`).then(res => {
+          this.store.tvList = res.data.results;
+          console.log(this.store.tvList);
         });
       }
     }
