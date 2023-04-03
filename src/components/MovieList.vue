@@ -5,6 +5,7 @@
             :title="movie.title"
             :original_title="movie.original_title"
             :lang="movie.original_language"
+
             :score="movie.vote_average"
             ></MovieCard>
         </div>
