@@ -6,6 +6,7 @@
             :original_title="movie.original_title"
             :lang="movie.original_language"
             :score="movie.vote_average"
+            :img="getImg(movie.poster_path)"
             ></MovieCard>
         </div>
     </div>
@@ -17,6 +18,7 @@
             :original_title="tv.original_name"
             :lang="tv.original_language"
             :score="tv.vote_average"
+            :img="getImg(tv.poster_path)"
             ></MovieCard>
         </div>
     </div>
@@ -34,6 +36,11 @@
         data() {
             return {
                 store
+            }
+        },
+        methods: {
+            getImg(path) {
+                return "https://image.tmdb.org/t/p/w342" + path;
             }
         }
     }

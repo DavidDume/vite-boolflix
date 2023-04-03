@@ -1,5 +1,7 @@
 <template>
 
+    <img :src="img" alt="">
+
     <h4>{{ title }}</h4>
     <h5>{{ original_title }}</h5>
 
@@ -16,7 +18,8 @@
             title: String,
             original_title: String,
             lang: String,
-            score: Number
+            score: Number,
+            img: String
         },
         data() {
             return {
