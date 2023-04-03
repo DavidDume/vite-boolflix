@@ -7,8 +7,13 @@
 
     <img v-if="validFlag" :src="getFlag(lang)">
     <h5 v-else="!validFlag">{{ lang }}</h5>
- 
-    <h5>{{ score }}</h5>
+
+    <div class="stars">
+        <div class="star" v-for="r in 5">
+            <i class="fa-solid fa-star" v-if="r <= score" style="color: #fff700;"></i>
+            <i class="fa-regular fa-star" v-else="r > score"></i>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -43,6 +48,11 @@
 
 <style lang="scss">
 
+    .stars {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
 
 </style>

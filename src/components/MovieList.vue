@@ -5,7 +5,7 @@
             :title="movie.title"
             :original_title="movie.original_title"
             :lang="movie.original_language"
-            :score="movie.vote_average"
+            :score="getScore(movie.vote_average)"
             :img="getImg(movie.poster_path)"
             ></MovieCard>
         </div>
@@ -17,7 +17,7 @@
             :title="tv.title"
             :original_title="tv.original_name"
             :lang="tv.original_language"
-            :score="tv.vote_average"
+            :score="getScore(tv.vote_average)"
             :img="getImg(tv.poster_path)"
             ></MovieCard>
         </div>
@@ -41,6 +41,11 @@
         methods: {
             getImg(path) {
                 return "https://image.tmdb.org/t/p/w342" + path;
+            },
+            getScore(score) {
+                score = Math.ceil(score);
+                let percentage = score * 10;
+                return Math.ceil((5/100)*percentage);
             }
         }
     }
