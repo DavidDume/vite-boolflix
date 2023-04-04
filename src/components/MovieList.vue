@@ -1,35 +1,34 @@
 <template>
-    <div class="modal">
+    <div>
         <Modal v-if="showModal" @closeModal="showModal = false" 
-        :title="modalInfo.original_title"
-        
+        :title="name"
+        :original_title="modalInfo.original_title"
+        :lang="modalInfo.original_language"
+        :score="getScore(modalInfo.vote_average)"
+        :overview="modalInfo.overview"
+        :id="modalInfo.id"
+        :video="videoSrc"
+        :isVideo="showVideo"
+        :image="getImg(modalInfo.poster_path, 'w154')"
         ></Modal>
     </div>
 
+    <h2 v-if="store.movieList.length > 0" class="text-center">Movies</h2>
+
     <div class="card-list" >
         
-        <div class="card" v-for="(movie, index) in store.movieList" :key="index" @click="getModal(index)">
-        
-            <MovieCard 
-            :title="movie.title"
-            :original_title="movie.original_title"
-            :lang="movie.original_language"
-            :score="getScore(movie.vote_average)"
-            :img="getImg(movie.poster_path)"
-            ></MovieCard>
+        <div class="card" v-for="(movie, index) in store.movieList" :key="index" @click="getModal(index, 'movie')">  
+            <MovieCard :img="getImg(movie.poster_path, 'w342')"></MovieCard>
         </div>
+
     </div>
-    <h2 v-if="store.tvList.length > 0">TV Series</h2>
+
+    <h2 v-if="store.tvList.length > 0" class="text-center">TV Series</h2>
+
     <div class="card-list">
-        <div class="card" v-for="(tv, index) in store.tvList" :key="index" @click="showModal = true">
-            <MovieCard 
-            :title="tv.title"
-            :original_title="tv.original_name"
-            :lang="tv.original_language"
-            :score="getScore(tv.vote_average)"
-            :img="getImg(tv.poster_path)"
-            ></MovieCard>
-           
+        <div class="card" v-for="(tv, index) in store.tvList" :key="index" @click="getModal(index, 'tv')">
+            <MovieCard :img="getImg(tv.poster_path, 'w342')"></MovieCard>
+            <h5>{{ }}</h5>
         </div>
     </div>
 </template>
@@ -38,6 +37,7 @@
     import MovieCard from './MovieCard.vue';
     import Modal from './Modal.vue';
     import { store } from '../store.js';
+    import axios  from 'axios';
 
     export default {
         name: 'MovieList',
@@ -49,37 +49,73 @@
             return {
                 store,
                 showModal: false,
-                modalInfo: {}
+                modalInfo: {},
+                name: '',
+                videos: [],
+                videoSrc: '',
+                showVideo: false
             }
         },
         methods: {
-            getImg(path) {
-                return "https://image.tmdb.org/t/p/w342" + path;
+            getImg(path, size) {
+                if(!path) {
+                    return '../../not-found-image.jpg';
+                }
+                return "https://image.tmdb.org/t/p/"+ size + path;
             },
             getScore(score) {
                 score = Math.ceil(score);
                 let percentage = score * 10;
                 return Math.ceil((5/100)*percentage);
             },
-            getModal(index) {
+            getModal(index, type) {
                 this.showModal = true;
-                this.modalInfo = this.store.movieList[index];
-            }
+                if(type=='movie') {
+                    this.modalInfo = this.store.movieList[index];
+                    this.name = this.modalInfo.title;
+                    this.getTrailer()
+                } else {
+                    this.modalInfo = this.store.tvList[index];
+                    this.name = this.modalInfo.name;
+                }
+            },
+            getTrailer() {
+                this.videos = []
+                axios.get(`https://api.themoviedb.org/3/movie/${this.modalInfo.id}/videos?api_key=ed158e502ecb83467e70d8afc24af02b`).then(res => {
+                  
+                    this.videos = res.data.results.filter(d => d.type == 'Trailer');
+
+                    if(this.videos.length > 0) {
+                        this.videoSrc = `https://www.youtube.com/embed/${this.videos[0].key}`;
+                        this.showVideo = true;
+                    } else {
+                        this.showVideo = false;
+                    }
+                    
+                });
+            },
         }
     }
 </script>
 
 <style lang="scss">
 
+    .text-center {
+        text-align: center;
+    }
 
     .card-list {
         display: flex;
+        justify-content: center;
+        align-items: center;
         flex-wrap: wrap;
         gap: 20px;
         .card {
             text-align: center;
-            width: calc((100%/3) - 40px);
-            border: 1px solid black;
+            width: calc((100%/5) - 40px);
+            & img {
+                width: 100%;
+            }
         }
     }
 
