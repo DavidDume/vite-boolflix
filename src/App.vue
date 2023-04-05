@@ -24,19 +24,24 @@
         axios.get(`https://api.themoviedb.org/3/search/tv?api_key=ed158e502ecb83467e70d8afc24af02b&language=it_IT&query=${this.store.search}`).then(res => {
           this.store.tvList = res.data.results;
         });
+        this.store.search = ''
+      },
+      getTrending() {
+        axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=ed158e502ecb83467e70d8afc24af02b&language=en-US&page=1`).then(res => {
+          this.store.movieList = res.data.results;
+        });
+        this.store.searched = false;
       }
     },
     mounted() {
-      axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=ed158e502ecb83467e70d8afc24af02b&language=en-US&page=1`).then(res => {
-          this.store.movieList = res.data.results;
-        });
+      this.getTrending();
     }
   }
 </script>
 
 <template>
   <div class="header">
-    <h1>BOOLFLIX</h1>
+    <h1 @click="getTrending()" class="home">BOOLFLIX</h1>
     <Search @search="doSearch()"></Search>
   </div>
   <h1 v-if="!store.searched">Trending Movies</h1>
@@ -54,6 +59,9 @@
     background-color: #1b1b1b;
     & h1 {
       color: red;
+    }
+    & .home:hover {
+      cursor: pointer;
     }
   }
   h1 {

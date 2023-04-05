@@ -1,8 +1,7 @@
 <template>
-    <div>
+    <div class="container">
         <Modal v-if="showModal" @closeModal="showModal = false" 
         :title="name"
-        :original_title="modalInfo.original_title"
         :lang="modalInfo.original_language"
         :score="getScore(modalInfo.vote_average)"
         :overview="modalInfo.overview"
@@ -12,7 +11,7 @@
         :image="getImg(modalInfo.poster_path, 'w154')"
         ></Modal>
     </div>
-
+    <h2 v-if="store.searched" class="text-center">Movies</h2>
     <div class="card-list" >
         
         <div class="card" v-for="(movie, index) in store.movieList" :key="index" @click="getModal(index, 'movie')">  
@@ -51,7 +50,7 @@
                 name: '',
                 videos: [],
                 videoSrc: '',
-                showVideo: false
+                showVideo: false,
             }
         },
         methods: {
@@ -104,6 +103,7 @@
 
     .text-center {
         text-align: center;
+        margin-bottom: 10px;
     }
 
     .card-list {
@@ -118,7 +118,14 @@
             & img {
                 width: 100%;
             }
+            &:hover {
+                cursor: pointer;
+            } 
         }
+    }
+
+    .container {
+        margin-top: 20px;
     }
 
 </style>

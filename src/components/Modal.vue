@@ -4,7 +4,9 @@
 
        <div class="modal">
             <div class="btn">
-                <button @click="$emit('closeModal')">X</button>
+                <button @click="$emit('closeModal')">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
             <div class="media">
                 <iframe width="600" height="315"
@@ -13,9 +15,8 @@
                 <img :src="image" alt="" v-else="!isVideo">
             </div>
             <h4>{{ title }}</h4>
-            <h5>{{ original_title }}</h5>
             <h4>{{ overview }}</h4>
-            <img v-if="validFlag" :src="getFlag(lang)">
+            <img v-if="validFlag" :src="getFlag(lang)" class="flag">
             <h5 v-else="!validFlag">{{ lang }}</h5>
             <div class="stars">
                 <div class="star" v-for="r in 5">
@@ -35,7 +36,6 @@
         name: 'Modal',
         props: {
             title: String,
-            original_title: String,
             lang: String,
             score: Number,
             overview: String,
@@ -70,12 +70,28 @@
 
     .modal {
         width: 600px;
-        height: 700px;
-        background-color: white;
-        border: 1px solid black;
+        height: auto;
+        background-color: black;
+        color: white;
+        padding: 10px;
+        & h4 {
+            margin: 10px;
+        }
         & .btn {
             text-align: right;
             padding: 10px;
+            
+            & button {
+                padding: 3px;
+                background-color: transparent;
+                border: none;
+                font-size: 18px;
+                color: white;
+                &:hover {
+                    cursor: pointer;
+                    color: red;
+                }
+            }
         }
 
         & .media {
@@ -89,11 +105,14 @@
         }
     }
     
-    
+    .flag {
+        margin: 10px;
+    }
     .stars {
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-bottom: 20px;
     }
 
 </style>
