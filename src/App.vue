@@ -17,6 +17,7 @@
     },
     methods: {
       doSearch() {
+        this.store.searched = true
         axios.get(`https://api.themoviedb.org/3/search/movie?api_key=ed158e502ecb83467e70d8afc24af02b&language=it_IT&query=${this.store.search}`).then(res => {
           this.store.movieList = res.data.results;
         });
@@ -24,6 +25,11 @@
           this.store.tvList = res.data.results;
         });
       }
+    },
+    mounted() {
+      axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=ed158e502ecb83467e70d8afc24af02b&language=en-US&page=1`).then(res => {
+          this.store.movieList = res.data.results;
+        });
     }
   }
 </script>
@@ -33,6 +39,7 @@
     <h1>BOOLFLIX</h1>
     <Search @search="doSearch()"></Search>
   </div>
+  <h1 v-if="!store.searched">Trending Movies</h1>
   <MovieList></MovieList>
 </template>
 
@@ -48,5 +55,8 @@
     & h1 {
       color: red;
     }
+  }
+  h1 {
+    text-align: center;
   }
 </style>

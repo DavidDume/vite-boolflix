@@ -73,9 +73,19 @@
         height: 700px;
         background-color: white;
         border: 1px solid black;
-        .btn {
+        & .btn {
             text-align: right;
             padding: 10px;
+        }
+
+        & .media {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            img {
+                width: 50%;
+            }
+            
         }
     }
     

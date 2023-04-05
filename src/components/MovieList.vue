@@ -13,8 +13,6 @@
         ></Modal>
     </div>
 
-    <h2 v-if="store.movieList.length > 0" class="text-center">Movies</h2>
-
     <div class="card-list" >
         
         <div class="card" v-for="(movie, index) in store.movieList" :key="index" @click="getModal(index, 'movie')">  
@@ -73,15 +71,16 @@
                 if(type=='movie') {
                     this.modalInfo = this.store.movieList[index];
                     this.name = this.modalInfo.title;
-                    this.getTrailer()
+                    this.getTrailer(type)
                 } else {
                     this.modalInfo = this.store.tvList[index];
                     this.name = this.modalInfo.name;
+                    this.getTrailer(type)
                 }
             },
-            getTrailer() {
-                this.videos = []
-                axios.get(`https://api.themoviedb.org/3/movie/${this.modalInfo.id}/videos?api_key=ed158e502ecb83467e70d8afc24af02b`).then(res => {
+            getTrailer(type) {
+
+                axios.get(`https://api.themoviedb.org/3/${type}/${this.modalInfo.id}/videos?api_key=ed158e502ecb83467e70d8afc24af02b`).then(res => {
                   
                     this.videos = res.data.results.filter(d => d.type == 'Trailer');
 
@@ -89,7 +88,10 @@
                         this.videoSrc = `https://www.youtube.com/embed/${this.videos[0].key}`;
                         this.showVideo = true;
                     } else {
+                        this.videos = [];
+                        this.videoSrc = '';
                         this.showVideo = false;
+
                     }
                     
                 });
