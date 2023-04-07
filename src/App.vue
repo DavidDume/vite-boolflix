@@ -28,7 +28,8 @@
           this.store.tvList = res.data.results;
         });
 
-        this.store.search = ''
+        this.store.search = '';
+        this.store.reccomendedList = [];
       },
       getTrending() {
         axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=ed158e502ecb83467e70d8afc24af02b&language=en-US&page=1`).then(res => {
@@ -37,14 +38,7 @@
         this.store.searched = false;
         this.store.tvList = [];
       },
-     /* getReccomandations() {
-        axios.get(`https://api.themoviedb.org/3/search/movie?api_key=ed158e502ecb83467e70d8afc24af02b&language=it_IT&query=${this.store.search}`).then(res => {
-          console.log(res.data.results.title);
-          console.log(this.store.search);
-        });
-      }*/
     },
-    
     mounted() {
       this.getTrending();
     }
